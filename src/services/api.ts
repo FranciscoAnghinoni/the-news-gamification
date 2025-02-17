@@ -16,7 +16,7 @@ export type NewsletterRead = {
 
 export const api = {
   async getReads(period: number = 7): Promise<NewsletterRead[]> {
-    const response = await apiClient.get("/fetch");
+    const response = await apiClient.get(`/fetch?period=${period}`);
     return response.data;
   },
 
