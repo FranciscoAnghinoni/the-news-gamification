@@ -1,8 +1,0 @@
-npm install @tanstack/react-query axios react-router-dom @chakra-ui/react @emotion/react @emotion/styled framer-motion recharts -D tailwindcss postcss autoprefixer
-npm install -g tailwindcss postcss autoprefixer
-tailwindcss init -p
-npm uninstall @chakra-ui/react @emotion/react @emotion/styled framer-motion 
-npm install -D tailwindcss postcss autoprefixer 
-npm install @heroicons/react
-npm install recharts
-npm run dev 
