@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { StreakCard } from "../components/StreakCard";
 import { ReadingHistory } from "../components/ReadingHistory";
+import { StreakCard } from "../components/StreakCard";
 import { useNewsletterData } from "../hooks/useNewsletterData";
 
 export function Dashboard() {
   const [period] = useState(7);
   const { data, isLoading, error } = useNewsletterData(period);
+
+  // Teste de conexão ao montar o componente
 
   if (isLoading) {
     return (

@@ -16,7 +16,12 @@ export type NewsletterRead = {
 
 export const api = {
   async getReads(period: number = 7): Promise<NewsletterRead[]> {
-    const response = await apiClient.get(`/fetch?period=${period}`);
+    const response = await apiClient.get("/fetch", {
+      params: {
+        email: "franciscoanghinoni@gmail.com",
+        period,
+      },
+    });
     return response.data;
   },
 
@@ -29,14 +34,32 @@ export const api = {
     const response = await apiClient.get(`/fetch?=${email}`);
     return response.data;
   },
+
+  async testConnection() {
+    try {
+      const response = await apiClient.get("/fetch", {
+        params: {
+          email: "franciscoanghinoni@gmail.com",
+        },
+      });
+      console.log("Resposta da API:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Erro na conexão:", error);
+      throw error;
+    }
+  },
 };
 
 // Funções utilitárias para processar dados
-export const processReadsData = (reads: NewsletterRead[]) => {
+export const processReadsData = (reads: any) => {
   const streaksByEmail = new Map<string, number>();
   const openRateByDay = new Map<string, { total: number; opened: number }>();
 
-  reads.forEach((read) => {
+  // Verifica se reads é um array, se não for, converte para array
+  const readsArray = Array.isArray(reads) ? reads : [reads];
+
+  readsArray.forEach((read) => {
     // Processa streaks
     const currentStreak = streaksByEmail.get(read.email) || 0;
     streaksByEmail.set(read.email, currentStreak + 1);

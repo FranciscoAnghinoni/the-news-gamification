@@ -9,7 +9,7 @@ import {
 } from "recharts";
 
 const mockData = [
-  { date: "15/02", rate: 65 },
+  { date: "15/02", rate: 6 },
   { date: "16/02", rate: 70 },
   { date: "17/02", rate: 68 },
   { date: "18/02", rate: 72 },
@@ -33,7 +33,7 @@ export function OpenRateChart({ period }: Props) {
         <XAxis dataKey="date" />
         <YAxis />
         <Tooltip formatter={(value) => [`${value}%`, "Taxa de Abertura"]} />
-        <Bar dataKey="rate" fill="#3B82F6" radius={[4, 4, 0, 0]} />
+        <Bar dataKey="rate" fill="#FFCE04" radius={[4, 4, 0, 0]} />
       </BarChart>
     </ResponsiveContainer>
   );
