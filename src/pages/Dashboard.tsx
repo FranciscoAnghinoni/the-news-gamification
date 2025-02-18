@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ReadingHistory } from "../components/ReadingHistory";
 import { StreakCard } from "../components/StreakCard";
 import { useNewsletterData } from "../hooks/useNewsletterData";
+import { MotivationalMessage } from "../components/MotivationalMessage";
 
 export function Dashboard() {
   const [period] = useState(7);
@@ -41,6 +42,7 @@ export function Dashboard() {
           </div>
         </div>
 
+        <MotivationalMessage streak={userStreak} />
         <ReadingHistory />
       </div>
     </div>
