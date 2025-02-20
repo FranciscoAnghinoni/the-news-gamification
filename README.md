@@ -1,50 +1,97 @@
-# React + TypeScript + Vite
+# Newsletter Gamification
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A gamification system for newsletter engagement tracking and rewards.
 
-Currently, two official plugins are available:
+## 🚀 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Track newsletter reads and engagement
+- Real-time statistics
+- User engagement metrics
+- Integration with newsletter platforms
 
-## Expanding the ESLint configuration
+## 🛠️ Technologies
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- React + TypeScript
+- Vite
+- Axios for API requests
+- Cloudflare Workers for backend
+- TanStack Query for data fetching
 
-- Configure the top-level `parserOptions` property like this:
+## 🏁 Getting Started
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### Prerequisites
+
+- Node.js (v16 or higher)
+- npm or yarn
+- A Cloudflare account (for the API)
+
+### Installation
+
+1. Clone the repository
+
+```bash
+git clone https://github.com/your-username/newsletter-gamification.git
+cd newsletter-gamification
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+2. Install dependencies
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+```bash
+npm install
+# or
+yarn install
 ```
+
+3. Set up environment variables
+
+```bash
+cp .env.example .env
+```
+
+Edit the `.env` file and add your API URL:
+
+```
+VITE_API_URL=your_api_url_here
+```
+
+4. Start the development server
+
+```bash
+npm run dev
+# or
+yarn dev
+```
+
+## 🔧 Configuration
+
+The application requires the following environment variables:
+
+- `VITE_API_URL`: The URL of your Cloudflare Workers API
+
+## 📚 API Documentation
+
+The API endpoints available are:
+
+- `GET /api/reads` - Get newsletter read statistics
+- More endpoints coming soon...
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 👥 Authors
+
+- Your Name - Initial work
+
+## 🙏 Acknowledgments
+
+- Thanks to all contributors
+- Inspired by newsletter engagement needs

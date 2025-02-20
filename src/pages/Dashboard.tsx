@@ -1,14 +1,14 @@
 import { useState } from "react";
+import { MotivationalMessage } from "../components/MotivationalMessage";
 import { ReadingHistory } from "../components/ReadingHistory";
 import { StreakCard } from "../components/StreakCard";
 import { useNewsletterData } from "../hooks/useNewsletterData";
-import { MotivationalMessage } from "../components/MotivationalMessage";
+import { useAuth } from "../hooks/useAuth";
 
 export function Dashboard() {
   const [period] = useState(7);
+  const { user } = useAuth();
   const { data, isLoading, error } = useNewsletterData(period);
-
-  // Teste de conexão ao montar o componente
 
   if (isLoading) {
     return (
@@ -26,7 +26,7 @@ export function Dashboard() {
     );
   }
 
-  const userStreak = data?.streaksByEmail.get("user@email.com") || 0; // Substituir pelo email do usuário logado
+  const userStreak = data?.streaksByEmail.get(user?.email || "") || 0;
   const userOpenRate = 85; // Calcular baseado nos dados reais
 
   return (
