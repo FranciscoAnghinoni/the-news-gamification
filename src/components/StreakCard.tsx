@@ -1,5 +1,5 @@
 type StreakCardProps = {
-  currentStreak: number;
+  currentStreak: number | undefined;
 };
 
 export function StreakCard({ currentStreak }: StreakCardProps) {

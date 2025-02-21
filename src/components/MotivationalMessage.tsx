@@ -1,31 +1,35 @@
 interface MotivationalMessageProps {
-  streak: number;
+  streak: number | undefined;
 }
 
 export function MotivationalMessage({ streak }: MotivationalMessageProps) {
   const getMessage = () => {
-    if (streak === 0) {
+    const currentStreak = streak ?? 0;
+
+    if (currentStreak === 0) {
       return "Comece hoje sua jornada de leitura diária!";
-    } else if (streak < 3) {
-      return `Você está há ${streak} ${
-        streak === 1 ? "dia" : "dias"
+    } else if (currentStreak < 3) {
+      return `Você está há ${currentStreak} ${
+        currentStreak === 1 ? "dia" : "dias"
       } seguidos lendo. Continue assim!`;
-    } else if (streak < 7) {
-      return `Incrível! ${streak} dias seguidos. Você está criando um ótimo hábito!`;
-    } else if (streak < 30) {
-      return `Uau! ${streak} dias de streak! Você é uma inspiração!`;
+    } else if (currentStreak < 7) {
+      return `Incrível! ${currentStreak} dias seguidos. Você está criando um ótimo hábito!`;
+    } else if (currentStreak < 30) {
+      return `Uau! ${currentStreak} dias de streak! Você é uma inspiração!`;
     } else {
-      return `${streak} dias! Você é uma lenda da leitura! Continue inspirando outros leitores!`;
+      return `${currentStreak} dias! Você é uma lenda da leitura! Continue inspirando outros leitores!`;
     }
   };
 
   return (
-    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-lg p-6 mb-8">
-      <div className="flex items-center gap-4">
-        <div className="text-2xl">
-          {streak >= 7 ? "🏆" : streak >= 3 ? "🔥" : "💪"}
+    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-lg p-6 h-full w-full flex items-center justify-center">
+      <div className="flex items-center gap-4 max-w-2xl">
+        <div className="text-2xl flex-shrink-0">
+          {(streak ?? 0) >= 7 ? "🏆" : (streak ?? 0) >= 3 ? "🔥" : "💪"}
         </div>
-        <p className="text-blue-800 font-medium text-lg">{getMessage()}</p>
+        <p className="text-blue-800 font-medium text-lg text-center">
+          {getMessage()}
+        </p>
       </div>
     </div>
   );

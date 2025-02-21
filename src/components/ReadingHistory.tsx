@@ -1,40 +1,59 @@
-export function ReadingHistory() {
-  const mockHistory = [
-    { date: "2024-02-20", title: "Newsletter #123", opened: true },
-    { date: "2024-02-19", title: "Newsletter #122", opened: true },
-    { date: "2024-02-18", title: "Newsletter #121", opened: false },
-  ];
+import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
+
+interface ReadingHistoryProps {
+  history?: Array<{
+    date: string;
+    post_id: string;
+  }>;
+  days?: number;
+}
+
+export function ReadingHistory({
+  history = [],
+  days = 7,
+}: ReadingHistoryProps) {
+  // Generate array of last n days
+  const getDaysArray = () => {
+    const today = new Date();
+    return Array.from({ length: days }, (_, i) => {
+      const date = new Date(today);
+      date.setDate(date.getDate() - i);
+      return date.toISOString().split("T")[0];
+    });
+  };
+
+  const lastDays = getDaysArray();
+  const readDays = new Set(history.map((item) => item.date.split("T")[0]));
 
   return (
-    <div className="p-5 shadow-md border rounded-lg">
-      <h2 className="text-xl font-semibold mb-4">Histórico de Leituras</h2>
-      <div className="overflow-x-auto">
-        <table className="min-w-full table-auto">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Data
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Newsletter
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Status
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {mockHistory.map((entry) => (
-              <tr key={entry.date}>
-                <td className="px-6 py-4 whitespace-nowrap">{entry.date}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{entry.title}</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {entry.opened ? "✅ Lida" : "❌ Não lida"}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <div className="bg-white rounded-xl p-6 border border-[#615A5A]/20">
+      <h2 className="text-lg font-semibold mb-6 text-[#240E0B]">
+        Histórico de Leituras
+      </h2>
+      <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
+        {lastDays.map((date) => {
+          const isRead = readDays.has(date);
+          const formattedDate = new Date(date).toLocaleDateString("pt-BR", {
+            weekday: "short",
+            day: "numeric",
+          });
+
+          return (
+            <div
+              key={date}
+              className={`flex flex-col items-center p-4 rounded-lg ${
+                isRead ? "bg-[#FFCE04]/10" : "bg-[#615A5A]/10"
+              }`}
+            >
+              <div className="text-sm text-[#615A5A] mb-2">{formattedDate}</div>
+              {isRead ? (
+                <CheckCircleIcon className="h-8 w-8 text-[#FFCE04]" />
+              ) : (
+                <XCircleIcon className="h-8 w-8 text-[#615A5A]" />
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
