@@ -20,14 +20,11 @@ export function ReadingHistory({
     const brazilianDate = new Date(today.getTime() - 3 * 60 * 60 * 1000);
     brazilianDate.setHours(0, 0, 0, 0);
 
-    console.log("Today UTC:", today.toISOString());
-    console.log("Brazilian today:", brazilianDate.toISOString());
 
     const daysArray = Array.from({ length: days }, (_, i) => {
       const date = new Date(brazilianDate);
       date.setDate(brazilianDate.getDate() - (days - 1) + i);
       const isoDate = date.toISOString().split("T")[0];
-      console.log(`Day ${i + 1}:`, isoDate);
       return isoDate;
     });
 
@@ -37,14 +34,11 @@ export function ReadingHistory({
   const lastDays = getDaysArray();
   const readDays = new Set(
     history.map((item) => {
-      console.log("Read day from history:", item.date);
       return item.date.split("T")[0];
     })
   );
 
-  console.log("All read days:", Array.from(readDays));
-  console.log("Days to display:", lastDays);
-
+ 
   return (
     <div className="bg-white rounded-xl p-6 border border-[#615A5A]/20">
       <h2 className="text-lg font-semibold mb-6 text-[#240E0B]">

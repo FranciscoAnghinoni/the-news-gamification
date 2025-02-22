@@ -13,7 +13,7 @@ interface TopReadersProps {
 
 export function TopReaders({ readers = mockTopReaders }: TopReadersProps) {
   return (
-    <div className="bg-branco rounded-xl shadow-lg border border-cinza/20 overflow-hidden h-full flex flex-col max-h-[584px] p-6">
+    <div className="bg-branco rounded-xl shadow-lg border border-cinza/20 overflow-hidden h-full flex flex-col  max-h-[584px] p-6">
       <h2 className="text-base font-bold text-marrom border-b border-cinza/10 flex items-center gap-2 flex-shrink-0 pb-2">
         <TrophyIcon className="h-5 w-5 text-amarelo" />
         Top Leitores da Semana

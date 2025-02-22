@@ -7,7 +7,6 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { HistoricalStats } from "../services/api";
 
 type Props = {
   data?: {
@@ -18,6 +17,8 @@ type Props = {
 
 export function StreakEvolutionChart({ data }: Props) {
   if (!data) return null;
+
+  console.log(data);
 
   const chartData = data.dates.map((date, index) => ({
     date: new Date(date).toLocaleDateString("pt-BR", {

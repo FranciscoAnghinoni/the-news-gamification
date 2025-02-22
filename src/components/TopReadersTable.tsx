@@ -59,10 +59,14 @@ export function TopReadersTable({ readers }: TopReadersTableProps) {
                 <td className="px-6 py-4 whitespace-nowrap text-marrom">
                   {reader.email}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-6 py-4 whitespace-nowrap flex items-center">
                   <div className="flex items-center">
                     <span className="text-sm font-medium text-marrom">
-                      {reader.streak}
+                      {reader.streak === 0 ? (
+                        <span className="text-red-400">0</span>
+                      ) : (
+                        reader.streak
+                      )}
                     </span>
                     {reader.streak > 10 && (
                       <span className="ml-2 px-2 py-1 text-xs font-medium bg-verde/20 text-verde rounded-full">

@@ -124,7 +124,7 @@ export const api = {
       const response = await apiClient.get(`/api/stats/admin`, {
         params: { startDate, endDate },
       });
-      console.log(response);
+      console.log(response.data);
       if (!response.data) {
         throw new ApiError("Dados não encontrados", 404);
       }
@@ -143,6 +143,7 @@ export const api = {
       const response = await apiClient.get(`/api/stats/admin/top-readers`, {
         params: { startDate, endDate },
       });
+      console.log(response.data);
       if (!response.data) {
         throw new ApiError("Dados não encontrados", 404);
       }

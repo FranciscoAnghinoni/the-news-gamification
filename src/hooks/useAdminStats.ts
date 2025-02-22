@@ -44,6 +44,7 @@ export function useAdminStats(period: number) {
     queryKey: ["historical-data", period],
     queryFn: async () => {
       const data = await api.getHistoricalStats(startDate, endDate);
+      console.log(data);
 
       const transformedData = {
         dates: data.daily_stats.map((stat) => stat.date),
