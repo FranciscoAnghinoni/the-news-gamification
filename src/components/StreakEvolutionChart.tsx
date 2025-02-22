@@ -7,38 +7,54 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-
-const mockData = [
-  { date: "15/02", avgStreak: 4 },
-  { date: "16/02", avgStreak: 4.5 },
-  { date: "17/02", avgStreak: 5 },
-  { date: "18/02", avgStreak: 5.5 },
-  { date: "19/02", avgStreak: 6 },
-  { date: "20/02", avgStreak: 7.5 },
-  { date: "21/02", avgStreak: 7 },
-];
+import { HistoricalStats } from "../services/api";
 
 type Props = {
-  period: number;
+  data?: {
+    dates: string[];
+    streaks: number[];
+  };
 };
 
-export function StreakEvolutionChart({ period }: Props) {
-  // Aqui podemos filtrar mockData baseado no período
-  const filteredData = mockData.slice(-period);
+export function StreakEvolutionChart({ data }: Props) {
+  if (!data) return null;
+
+  const chartData = data.dates.map((date, index) => ({
+    date: new Date(date).toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+    }),
+    avgStreak: data.streaks[index],
+  }));
 
   return (
     <ResponsiveContainer width="100%" height={300}>
-      <LineChart data={filteredData}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="date" />
-        <YAxis />
-        <Tooltip />
+      <LineChart data={chartData}>
+        <CartesianGrid strokeDasharray="3 3" stroke="#E5E5E5" />
+        <XAxis dataKey="date" stroke="#615A5A" fontSize={12} tickLine={false} />
+        <YAxis
+          stroke="#615A5A"
+          fontSize={12}
+          tickLine={false}
+          axisLine={false}
+        />
+        <Tooltip
+          contentStyle={{
+            backgroundColor: "#FFFFFF",
+            border: "1px solid #E5E5E5",
+            borderRadius: "8px",
+          }}
+          labelStyle={{ color: "#240E0B" }}
+          itemStyle={{ color: "#615A5A" }}
+          formatter={(value: number) => [value.toFixed(1), "Média de Streak"]}
+        />
         <Line
           type="monotone"
           dataKey="avgStreak"
-          stroke="#3B82F6"
+          stroke="#FFCE04"
           strokeWidth={2}
-          dot={{ fill: "#3B82F6", strokeWidth: 2 }}
+          dot={{ fill: "#FFCE04", strokeWidth: 2 }}
+          activeDot={{ r: 6, fill: "#FFCE04" }}
         />
       </LineChart>
     </ResponsiveContainer>

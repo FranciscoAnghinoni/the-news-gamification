@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -13,6 +13,15 @@ export function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { login, register: registerUser, isAuthenticated, user } = useAuth();
+  const navigate = useNavigate();
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      navigate(user.is_admin === 1 ? "/admin" : "/dashboard");
+    }
+  }, [isAuthenticated, user, navigate]);
 
   const {
     register,
@@ -24,9 +33,6 @@ export function AuthPage() {
   } = useForm<FormInputs>({
     mode: "onBlur",
   });
-
-  const { login, register: registerUser } = useAuth();
-  const navigate = useNavigate();
 
   const onSubmit = async (data: FormInputs) => {
     setLoading(true);

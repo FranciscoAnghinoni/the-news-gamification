@@ -21,29 +21,29 @@ export function MetricCard({
   icon,
 }: MetricCardProps) {
   return (
-    <div className="p-6 bg-white rounded-lg border shadow-sm">
+    <div className="p-6 bg-branco rounded-lg border border-cinza/20 shadow-sm hover:shadow-md transition-shadow">
       <div className="flex items-center justify-between mb-2">
-        <h3 className="text-gray-500 text-sm font-medium">{title}</h3>
-        {icon && <div className="text-gray-400">{icon}</div>}
+        <h3 className="text-cinza text-sm font-medium">{title}</h3>
+        {icon && <div className="text-amarelo">{icon}</div>}
       </div>
-      <p className="text-3xl font-bold mb-2">{value}</p>
+      <p className="text-3xl font-bold mb-2 text-marrom">{value}</p>
       {trend && (
         <div className="flex items-center gap-1 mb-1">
           {trend.isPositive ? (
-            <ArrowUpIcon className="w-4 h-4 text-green-500" />
+            <ArrowUpIcon className="w-4 h-4 text-verde" />
           ) : (
-            <ArrowDownIcon className="w-4 h-4 text-red-500" />
+            <ArrowDownIcon className="w-4 h-4 text-vermelho" />
           )}
           <span
             className={`text-sm ${
-              trend.isPositive ? "text-green-500" : "text-red-500"
+              trend.isPositive ? "text-verde" : "text-vermelho"
             }`}
           >
             {trend.value}%
           </span>
         </div>
       )}
-      {description && <p className="text-gray-600 text-sm">{description}</p>}
+      {description && <p className="text-cinza text-sm">{description}</p>}
     </div>
   );
 }

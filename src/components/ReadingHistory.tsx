@@ -12,18 +12,38 @@ export function ReadingHistory({
   history = [],
   days = 7,
 }: ReadingHistoryProps) {
-  // Generate array of last n days
+  // Generate array of last n days in ascending order (oldest to newest)
   const getDaysArray = () => {
+    // Get current date in Brazilian timezone
     const today = new Date();
-    return Array.from({ length: days }, (_, i) => {
-      const date = new Date(today);
-      date.setDate(date.getDate() - i);
-      return date.toISOString().split("T")[0];
+    // Adjust for Brazilian timezone (UTC-3)
+    const brazilianDate = new Date(today.getTime() - 3 * 60 * 60 * 1000);
+    brazilianDate.setHours(0, 0, 0, 0);
+
+    console.log("Today UTC:", today.toISOString());
+    console.log("Brazilian today:", brazilianDate.toISOString());
+
+    const daysArray = Array.from({ length: days }, (_, i) => {
+      const date = new Date(brazilianDate);
+      date.setDate(brazilianDate.getDate() - (days - 1) + i);
+      const isoDate = date.toISOString().split("T")[0];
+      console.log(`Day ${i + 1}:`, isoDate);
+      return isoDate;
     });
+
+    return daysArray;
   };
 
   const lastDays = getDaysArray();
-  const readDays = new Set(history.map((item) => item.date.split("T")[0]));
+  const readDays = new Set(
+    history.map((item) => {
+      console.log("Read day from history:", item.date);
+      return item.date.split("T")[0];
+    })
+  );
+
+  console.log("All read days:", Array.from(readDays));
+  console.log("Days to display:", lastDays);
 
   return (
     <div className="bg-white rounded-xl p-6 border border-[#615A5A]/20">
@@ -33,10 +53,13 @@ export function ReadingHistory({
       <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
         {lastDays.map((date) => {
           const isRead = readDays.has(date);
-          const formattedDate = new Date(date).toLocaleDateString("pt-BR", {
-            weekday: "short",
-            day: "numeric",
-          });
+          const formattedDate = new Date(date + "T00:00:00").toLocaleDateString(
+            "pt-BR",
+            {
+              weekday: "short",
+              day: "numeric",
+            }
+          );
 
           return (
             <div

@@ -1,132 +1,91 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 
-type Reader = {
+interface TopReader {
   email: string;
   streak: number;
-  totalReads: number;
-  openRate: string;
-  lastRead?: string;
-  status: "active" | "inactive";
-};
+  opening_rate: number;
+  last_read: string;
+}
 
-export function TopReadersTable() {
+interface TopReadersTableProps {
+  readers: TopReader[];
+}
+
+export function TopReadersTable({ readers }: TopReadersTableProps) {
   const [search, setSearch] = useState("");
 
-  const mockReaders: Reader[] = [
-    {
-      email: "leitor1@email.com",
-      streak: 15,
-      totalReads: 45,
-      openRate: "95%",
-      lastRead: "2024-02-20",
-      status: "active",
-    },
-    {
-      email: "leitor2@email.com",
-      streak: 12,
-      totalReads: 40,
-      openRate: "88%",
-      lastRead: "2024-02-19",
-      status: "active",
-    },
-    {
-      email: "leitor3@email.com",
-      streak: 10,
-      totalReads: 38,
-      openRate: "85%",
-      lastRead: "2024-02-15",
-      status: "inactive",
-    },
-  ];
-
-  const filteredReaders = mockReaders.filter((reader) =>
+  const filteredReaders = readers.filter((reader) =>
     reader.email.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
-    <div className="bg-white rounded-lg border shadow-sm overflow-hidden">
-      <div className="p-4 border-b">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-semibold">Top Leitores</h2>
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Buscar por email..."
-              className="pl-10 pr-4 py-2 border rounded-lg w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-            <MagnifyingGlassIcon className="w-5 h-5 text-gray-400 absolute left-3 top-2.5" />
-          </div>
+    <div className="bg-branco rounded-lg border border-cinza/20 shadow-sm overflow-hidden">
+      <div className="p-4 border-b border-cinza/20">
+        <h2 className="text-lg font-semibold text-marrom mb-4">Top Leitores</h2>
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Buscar por email..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full pl-10 pr-4 py-2 border border-cinza/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-amarelo text-marrom placeholder-cinza"
+          />
+          <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-cinza" />
         </div>
       </div>
+
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+        <table className="min-w-full divide-y divide-cinza/20">
+          <thead className="bg-cinza/5">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+              <th className="px-6 py-3 text-left text-xs font-medium text-cinza uppercase tracking-wider">
                 Email
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+              <th className="px-6 py-3 text-left text-xs font-medium text-cinza uppercase tracking-wider">
                 Streak
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Total Leituras
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+              <th className="px-6 py-3 text-left text-xs font-medium text-cinza uppercase tracking-wider">
                 Taxa de Abertura
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+              <th className="px-6 py-3 text-left text-xs font-medium text-cinza uppercase tracking-wider">
                 Última Leitura
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Status
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-branco divide-y divide-cinza/20">
             {filteredReaders.map((reader) => (
-              <tr key={reader.email} className="hover:bg-gray-50">
-                <td className="px-6 py-4 whitespace-nowrap">{reader.email}</td>
+              <tr key={reader.email} className="hover:bg-amarelo/5">
+                <td className="px-6 py-4 whitespace-nowrap text-marrom">
+                  {reader.email}
+                </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center">
-                    <span className="text-sm font-medium">{reader.streak}</span>
+                    <span className="text-sm font-medium text-marrom">
+                      {reader.streak}
+                    </span>
                     {reader.streak > 10 && (
-                      <span className="ml-2 px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">
+                      <span className="ml-2 px-2 py-1 text-xs font-medium bg-verde/20 text-verde rounded-full">
                         Top
                       </span>
                     )}
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  {reader.totalReads}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="w-24 bg-gray-200 rounded-full h-2">
-                    <div
-                      className="bg-blue-600 h-2 rounded-full"
-                      style={{ width: reader.openRate }}
-                    />
+                  <div className="flex items-center">
+                    <div className="w-24 bg-cinza/20 rounded-full h-2">
+                      <div
+                        className="bg-amarelo h-2 rounded-full"
+                        style={{ width: `${reader.opening_rate}%` }}
+                      />
+                    </div>
+                    <span className="text-sm text-marrom ml-2">
+                      {reader.opening_rate.toFixed(1)}%
+                    </span>
                   </div>
-                  <span className="text-sm text-gray-600 ml-2">
-                    {reader.openRate}
-                  </span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {reader.lastRead}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span
-                    className={`px-2 py-1 text-xs font-medium rounded-full
-                    ${
-                      reader.status === "active"
-                        ? "bg-green-100 text-green-800"
-                        : "bg-gray-100 text-gray-800"
-                    }`}
-                  >
-                    {reader.status === "active" ? "Ativo" : "Inativo"}
-                  </span>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-cinza">
+                  {new Date(reader.last_read).toLocaleDateString("pt-BR")}
                 </td>
               </tr>
             ))}

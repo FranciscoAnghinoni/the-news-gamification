@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 // Types
 export interface UserStats {
@@ -15,50 +15,160 @@ export interface UserStats {
 }
 
 export interface AdminStats {
-  totalUsers: number;
-  averageStreak: number;
-  maxStreak: number;
-  totalReads: number;
-  topReaders: {
-    email: string;
-    currentStreak: number;
-    totalReads: number;
-  }[];
+  total_users: number;
+  avg_streak: number;
+  avg_opening_rate: number;
+  active_users: number;
+}
+
+export interface TopReader {
+  email: string;
+  streak: number;
+  opening_rate: number;
+  last_read: string;
+}
+
+export interface DailyStats {
+  date: string;
+  avg_streak: number;
+  opening_rate: number;
+}
+
+export interface HistoricalStats {
+  daily_stats: DailyStats[];
+}
+
+export class ApiError extends Error {
+  constructor(
+    message: string,
+    public status: number,
+    public isAuthError: boolean = false
+  ) {
+    super(message);
+    this.name = "ApiError";
+  }
 }
 
 // API client setup
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
-  // Don't use withCredentials for local development
-  withCredentials: false,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
+// Add auth token to requests
+apiClient.interceptors.request.use((config) => {
+  const token = localStorage.getItem("auth_token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+const handleApiError = (error: AxiosError) => {
+  if (error.response) {
+    const status = error.response.status;
+    if (status === 401) {
+      throw new ApiError(
+        "Não autenticado. Por favor, faça login novamente.",
+        status,
+        true
+      );
+    }
+    if (status === 403) {
+      throw new ApiError(
+        "Você não tem permissão para acessar este recurso.",
+        status,
+        true
+      );
+    }
+    if (status === 500) {
+      throw new ApiError(
+        "Erro interno do servidor. Tente novamente mais tarde.",
+        status
+      );
+    }
+  }
+  throw new ApiError("Erro ao conectar com o servidor.", 500);
+};
+
 // API service
 export const api = {
   async createUser(username: string): Promise<{ userId: number }> {
-    const response = await apiClient.post("/api/users", { username });
-    console.log("response", response);
-    return response.data;
+    try {
+      const response = await apiClient.post("/api/users", { username });
+      return response.data;
+    } catch (error) {
+      handleApiError(error as AxiosError);
+      throw error; // TypeScript needs this
+    }
   },
 
   async getUserStats(email: string): Promise<UserStats> {
-    console.log(email);
-    const response = await apiClient.get(`/api/stats?email=${email}`);
-    if (!response.data) {
-      throw new Error("Failed to get user stats");
+    try {
+      const response = await apiClient.get(`/api/stats?email=${email}`);
+      console.log(response.data);
+      if (!response.data) {
+        throw new ApiError("Dados não encontrados", 404);
+      }
+      return response.data;
+    } catch (error) {
+      handleApiError(error as AxiosError);
+      throw error;
     }
-    return response.data;
   },
 
-  async getAdminStats(): Promise<AdminStats> {
-    const response = await apiClient.get("/api/admin/stats");
-    if (!response.data) {
-      throw new Error("Failed to get admin stats");
+  async getAdminStats(startDate: string, endDate: string): Promise<AdminStats> {
+    try {
+      const response = await apiClient.get(`/api/stats/admin`, {
+        params: { startDate, endDate },
+      });
+      console.log(response);
+      if (!response.data) {
+        throw new ApiError("Dados não encontrados", 404);
+      }
+      return response.data;
+    } catch (error) {
+      handleApiError(error as AxiosError);
+      throw error;
     }
-    console.log("response", response);
-    return response.data;
+  },
+
+  async getTopReaders(
+    startDate: string,
+    endDate: string
+  ): Promise<TopReader[]> {
+    try {
+      const response = await apiClient.get(`/api/stats/admin/top-readers`, {
+        params: { startDate, endDate },
+      });
+      if (!response.data) {
+        throw new ApiError("Dados não encontrados", 404);
+      }
+      return response.data;
+    } catch (error) {
+      handleApiError(error as AxiosError);
+      throw error;
+    }
+  },
+
+  async getHistoricalStats(
+    startDate: string,
+    endDate: string
+  ): Promise<HistoricalStats> {
+    try {
+      const response = await apiClient.get(`/api/stats/admin/historical`, {
+        params: { startDate, endDate },
+      });
+
+      if (!response.data) {
+        throw new ApiError("Dados não encontrados", 404);
+      }
+      return response.data;
+    } catch (error) {
+      handleApiError(error as AxiosError);
+      throw error;
+    }
   },
 };

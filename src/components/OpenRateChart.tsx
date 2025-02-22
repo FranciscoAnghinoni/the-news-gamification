@@ -7,33 +7,58 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-
-const mockData = [
-  { date: "15/02", rate: 6 },
-  { date: "16/02", rate: 70 },
-  { date: "17/02", rate: 68 },
-  { date: "18/02", rate: 72 },
-  { date: "19/02", rate: 75 },
-  { date: "20/02", rate: 68 },
-  { date: "21/02", rate: 71 },
-];
+import { HistoricalStats } from "../services/api";
 
 type Props = {
-  period: number;
+  data?: {
+    dates: string[];
+    openRates: number[];
+  };
 };
 
-export function OpenRateChart({ period }: Props) {
-  // Aqui podemos filtrar mockData baseado no período
-  const filteredData = mockData.slice(-period);
+export function OpenRateChart({ data }: Props) {
+  if (!data) return null;
+
+  const chartData = data.dates.map((date, index) => ({
+    date: new Date(date).toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+    }),
+    rate: Math.min(100, Math.max(0, data.openRates[index])),
+  }));
 
   return (
     <ResponsiveContainer width="100%" height={300}>
-      <BarChart data={filteredData}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="date" />
-        <YAxis />
-        <Tooltip formatter={(value) => [`${value}%`, "Taxa de Abertura"]} />
-        <Bar dataKey="rate" fill="#FFCE04" radius={[4, 4, 0, 0]} />
+      <BarChart data={chartData}>
+        <CartesianGrid strokeDasharray="3 3" stroke="#E5E5E5" />
+        <XAxis dataKey="date" stroke="#615A5A" fontSize={12} tickLine={false} />
+        <YAxis
+          stroke="#615A5A"
+          fontSize={12}
+          tickLine={false}
+          axisLine={false}
+          domain={[0, 100]}
+          tickFormatter={(value) => `${value}%`}
+        />
+        <Tooltip
+          contentStyle={{
+            backgroundColor: "#FFFFFF",
+            border: "1px solid #E5E5E5",
+            borderRadius: "8px",
+          }}
+          labelStyle={{ color: "#240E0B" }}
+          itemStyle={{ color: "#615A5A" }}
+          formatter={(value: number) => [
+            `${value.toFixed(1)}%`,
+            "Taxa de Abertura",
+          ]}
+        />
+        <Bar
+          dataKey="rate"
+          fill="#FFCE04"
+          radius={[4, 4, 0, 0]}
+          name="Taxa de Abertura"
+        />
       </BarChart>
     </ResponsiveContainer>
   );

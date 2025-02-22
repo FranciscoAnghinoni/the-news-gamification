@@ -14,8 +14,7 @@ import { AuthenticatedLayout } from "./components/AuthenticatedLayout";
 import { AdminRoute } from "./components/AdminRoute";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { user, isAuthenticated, token } = useAuth();
-
+  const { user, isAuthenticated } = useAuth();
 
   // If not authenticated at all, redirect to auth page
   if (!isAuthenticated || !user) {
@@ -27,8 +26,8 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
 function App() {
   return (
-    <Router>
-      <AuthProvider>
+    <AuthProvider>
+      <Router>
         <Routes>
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
@@ -50,8 +49,8 @@ function App() {
           />
           <Route path="/" element={<Navigate to="/dashboard" />} />
         </Routes>
-      </AuthProvider>
-    </Router>
+      </Router>
+    </AuthProvider>
   );
 }
 

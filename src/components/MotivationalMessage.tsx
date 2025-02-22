@@ -1,6 +1,6 @@
-interface MotivationalMessageProps {
+type MotivationalMessageProps = {
   streak: number | undefined;
-}
+};
 
 export function MotivationalMessage({ streak }: MotivationalMessageProps) {
   const getMessage = () => {
@@ -22,12 +22,12 @@ export function MotivationalMessage({ streak }: MotivationalMessageProps) {
   };
 
   return (
-    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-lg p-6 h-full w-full flex items-center justify-center">
+    <div className="bg-gradient-to-r from-amarelo/10 to-amarelo/20 border border-amarelo/20 rounded-lg p-6 h-full w-full flex items-center justify-center">
       <div className="flex items-center gap-4 max-w-2xl">
         <div className="text-2xl flex-shrink-0">
           {(streak ?? 0) >= 7 ? "🏆" : (streak ?? 0) >= 3 ? "🔥" : "💪"}
         </div>
-        <p className="text-blue-800 font-medium text-lg text-center">
+        <p className="text-marrom font-medium text-lg text-center">
           {getMessage()}
         </p>
       </div>
