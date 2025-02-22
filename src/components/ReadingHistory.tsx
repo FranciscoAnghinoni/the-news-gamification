@@ -1,25 +1,14 @@
-import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
-
-interface ReadingHistoryProps {
-  history?: Array<{
-    date: string;
-    post_id: string;
-  }>;
-  days?: number;
-}
+import { Icon } from "./Icons";
+import { ReadingHistoryProps } from "../types/components/readers";
 
 export function ReadingHistory({
   history = [],
   days = 7,
 }: ReadingHistoryProps) {
-  // Generate array of last n days in ascending order (oldest to newest)
   const getDaysArray = () => {
-    // Get current date in Brazilian timezone
     const today = new Date();
-    // Adjust for Brazilian timezone (UTC-3)
     const brazilianDate = new Date(today.getTime() - 3 * 60 * 60 * 1000);
     brazilianDate.setHours(0, 0, 0, 0);
-
 
     const daysArray = Array.from({ length: days }, (_, i) => {
       const date = new Date(brazilianDate);
@@ -38,7 +27,6 @@ export function ReadingHistory({
     })
   );
 
- 
   return (
     <div className="bg-white rounded-xl p-6 border border-[#615A5A]/20">
       <h2 className="text-lg font-semibold mb-6 text-[#240E0B]">
@@ -63,11 +51,12 @@ export function ReadingHistory({
               }`}
             >
               <div className="text-sm text-[#615A5A] mb-2">{formattedDate}</div>
-              {isRead ? (
-                <CheckCircleIcon className="h-8 w-8 text-[#FFCE04]" />
-              ) : (
-                <XCircleIcon className="h-8 w-8 text-[#615A5A]" />
-              )}
+              <Icon
+                name={isRead ? "CheckCircle" : "XCircle"}
+                className={`h-8 w-8 ${
+                  isRead ? "text-[#FFCE04]" : "text-[#615A5A]"
+                }`}
+              />
             </div>
           );
         })}

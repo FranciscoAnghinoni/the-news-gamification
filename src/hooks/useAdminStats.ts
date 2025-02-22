@@ -3,12 +3,9 @@ import { api } from "../services/api";
 
 export function useAdminStats(period: number) {
   const getDateRange = (days: number) => {
-    // End date is today at the start of the day (00:00:00)
     const endDate = new Date();
     endDate.setHours(0, 0, 0, 0);
 
-    // Start date is (days - 1) days before end date
-    // For 7 days: today and 6 days before = 7 days total
     const startDate = new Date(endDate);
     startDate.setDate(endDate.getDate() - (days - 1));
 
@@ -17,7 +14,6 @@ export function useAdminStats(period: number) {
       endDate: endDate.toISOString().split("T")[0],
     };
 
-    // Verificar datas no intervalo
     const dates = [];
     const current = new Date(startDate);
     while (current <= endDate) {
@@ -44,7 +40,6 @@ export function useAdminStats(period: number) {
     queryKey: ["historical-data", period],
     queryFn: async () => {
       const data = await api.getHistoricalStats(startDate, endDate);
-      console.log(data);
 
       const transformedData = {
         dates: data.daily_stats.map((stat) => stat.date),

@@ -26,7 +26,6 @@ const getTranslatedError = (message: string) =>
 
 const getErrorMessage = (error: unknown) => {
   if (error instanceof AxiosError) {
-    // Check for error message in different possible locations
     const message =
       error.response?.data?.error ||
       error.response?.data?.message ||

@@ -1,17 +1,5 @@
-import { ArrowUpIcon, ArrowDownIcon } from "@heroicons/react/24/solid";
-
-type TrendIndicator = {
-  value: number;
-  isPositive: boolean;
-};
-
-type MetricCardProps = {
-  title: string;
-  value: string | number;
-  description?: string;
-  trend?: TrendIndicator;
-  icon?: React.ReactNode;
-};
+import { Icon } from "./Icons";
+import { MetricCardProps } from "../types/components/metrics";
 
 export function MetricCard({
   title,
@@ -29,11 +17,12 @@ export function MetricCard({
       <p className="text-3xl font-bold mb-2 text-marrom">{value}</p>
       {trend && (
         <div className="flex items-center gap-1 mb-1">
-          {trend.isPositive ? (
-            <ArrowUpIcon className="w-4 h-4 text-verde" />
-          ) : (
-            <ArrowDownIcon className="w-4 h-4 text-vermelho" />
-          )}
+          <Icon
+            name={trend.isPositive ? "ArrowUp" : "ArrowDown"}
+            className={`w-4 h-4 ${
+              trend.isPositive ? "text-verde" : "text-vermelho"
+            }`}
+          />
           <span
             className={`text-sm ${
               trend.isPositive ? "text-verde" : "text-vermelho"

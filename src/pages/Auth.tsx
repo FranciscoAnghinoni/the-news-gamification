@@ -16,7 +16,6 @@ export function AuthPage() {
   const { login, register: registerUser, isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
 
-  // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated && user) {
       navigate(user.is_admin === 1 ? "/admin" : "/dashboard");
@@ -55,7 +54,6 @@ export function AuthPage() {
         });
       }
 
-      // Redirect based on admin status
       navigate(response.user.is_admin === 1 ? "/admin" : "/dashboard");
     } catch (error) {
       setFormError("root", {
@@ -80,7 +78,6 @@ export function AuthPage() {
     <div className="min-h-screen bg-marrom flex items-center justify-center px-4">
       <div className="max-w-md w-full space-y-8 bg-branco p-8 rounded-lg shadow-xl">
         <div className="text-center">
-          {/* Coffee cup icon */}
           <div className="mx-auto w-16 h-16 text-amarelo">
             <svg
               xmlns="http://www.w3.org/2000/svg"

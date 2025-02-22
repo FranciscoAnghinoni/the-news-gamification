@@ -7,7 +7,6 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { HistoricalStats } from "../services/api";
 
 type Props = {
   data?: {

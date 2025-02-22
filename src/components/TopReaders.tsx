@@ -1,21 +1,12 @@
-import { TrophyIcon, UserCircleIcon } from "@heroicons/react/24/outline";
+import { Icon } from "./Icons";
 import { mockTopReaders } from "../mocks/topReaders";
-
-interface Reader {
-  name: string;
-  openRate: number;
-  streak: number;
-}
-
-interface TopReadersProps {
-  readers?: Reader[];
-}
+import { TopReadersProps } from "../types/components/readers";
 
 export function TopReaders({ readers = mockTopReaders }: TopReadersProps) {
   return (
-    <div className="bg-branco rounded-xl shadow-lg border border-cinza/20 overflow-hidden h-full flex flex-col  max-h-[584px] p-6">
+    <div className="bg-branco rounded-xl shadow-lg border border-cinza/20 overflow-hidden h-full flex flex-col max-h-[600px] lg:max-h-[584px] p-6">
       <h2 className="text-base font-bold text-marrom border-b border-cinza/10 flex items-center gap-2 flex-shrink-0 pb-2">
-        <TrophyIcon className="h-5 w-5 text-amarelo" />
+        <Icon name="Trophy" className="h-5 w-5 text-amarelo" />
         Top Leitores da Semana
       </h2>
       <div className="divide-y divide-cinza/10 overflow-y-auto">
@@ -42,7 +33,10 @@ export function TopReaders({ readers = mockTopReaders }: TopReadersProps) {
               </div>
               <div className="flex-grow min-w-0">
                 <div className="flex items-center gap-2">
-                  <UserCircleIcon className="h-5 w-5 text-amarelo flex-shrink-0" />
+                  <Icon
+                    name="UserCircle"
+                    className="h-5 w-5 text-amarelo flex-shrink-0"
+                  />
                   <span className="font-medium text-marrom truncate text-sm">
                     {reader.name}
                   </span>

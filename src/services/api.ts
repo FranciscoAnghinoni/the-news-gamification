@@ -1,6 +1,5 @@
 import axios, { AxiosError } from "axios";
 
-// Types
 export interface UserStats {
   current_streak: number;
   highest_streak: number;
@@ -57,7 +56,6 @@ const apiClient = axios.create({
   },
 });
 
-// Add auth token to requests
 apiClient.interceptors.request.use((config) => {
   const token = localStorage.getItem("auth_token");
   if (token) {
@@ -101,14 +99,13 @@ export const api = {
       return response.data;
     } catch (error) {
       handleApiError(error as AxiosError);
-      throw error; // TypeScript needs this
+      throw error;
     }
   },
 
   async getUserStats(email: string): Promise<UserStats> {
     try {
       const response = await apiClient.get(`/api/stats?email=${email}`);
-      console.log(response.data);
       if (!response.data) {
         throw new ApiError("Dados não encontrados", 404);
       }
@@ -124,7 +121,6 @@ export const api = {
       const response = await apiClient.get(`/api/stats/admin`, {
         params: { startDate, endDate },
       });
-      console.log(response.data);
       if (!response.data) {
         throw new ApiError("Dados não encontrados", 404);
       }
@@ -143,7 +139,6 @@ export const api = {
       const response = await apiClient.get(`/api/stats/admin/top-readers`, {
         params: { startDate, endDate },
       });
-      console.log(response.data);
       if (!response.data) {
         throw new ApiError("Dados não encontrados", 404);
       }

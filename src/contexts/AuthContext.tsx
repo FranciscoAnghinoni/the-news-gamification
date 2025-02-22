@@ -19,7 +19,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {
-    // Check for stored auth data on mount
     const storedToken = localStorage.getItem("auth_token");
     const storedUser = localStorage.getItem("auth_user");
 
@@ -29,7 +28,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setToken(storedToken);
         setUser(parsedUser);
       } catch {
-        // If there's an error parsing the stored user, clear the storage
         localStorage.removeItem("auth_token");
         localStorage.removeItem("auth_user");
       }
