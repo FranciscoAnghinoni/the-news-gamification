@@ -17,7 +17,7 @@ import {
   FunnelIcon,
   ArrowPathIcon,
 } from "@heroicons/react/24/outline";
-import { IconName, IconProps } from "../types/components/icons";
+import { IconProps } from "../types/components/icons";
 
 export const Icons = {
   Users: UsersIcon,

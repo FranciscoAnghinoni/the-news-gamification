@@ -4,6 +4,13 @@ Uma aplicação web para gamificar a leitura de newsletters, incentivando o enga
 
 ## Funcionalidades
 
+### Autenticação
+
+- Sistema de login e registro
+- Persistência de sessão
+- Proteção de rotas
+- Gerenciamento de tokens
+
 ### Painel Administrativo
 
 - **Métricas em Tempo Real**
@@ -83,6 +90,9 @@ src/
   │   ├── FilterModal/  # Modal de filtros com feedback de loading
   │   ├── MetricCard/   # Cards de métricas
   │   └── Charts/       # Componentes de gráficos
+  ├── contexts/         # Contextos React
+  │   ├── auth.ts      # Definição do contexto de autenticação
+  │   └── AuthProvider.tsx # Provedor de autenticação
   ├── hooks/            # Custom hooks
   │   └── useAdminStats/# Hook para gerenciar dados admin
   ├── pages/            # Páginas da aplicação
@@ -99,6 +109,8 @@ src/
 - `GET /api/stats/admin` - Estatísticas gerais
 - `GET /api/stats/admin/top-readers` - Top leitores
 - `GET /api/stats/admin/historical` - Dados históricos
+- `POST /api/auth/login` - Login de usuário
+- `POST /api/auth/register` - Registro de usuário
 
 ### Filtros
 
@@ -108,6 +120,15 @@ Os endpoints aceitam os seguintes parâmetros:
 - `endDate`: Data final (YYYY-MM-DD)
 - `newsletterDate`: Data específica da newsletter (opcional)
 - `minStreak`: Streak mínimo (opcional)
+
+### Autenticação
+
+A aplicação utiliza autenticação baseada em token:
+
+- Tokens são armazenados no localStorage
+- Sessões persistem entre reloads
+- Rotas protegidas redirecionam para login
+- Tokens são enviados automaticamente nas requisições
 
 ### Modo Mock
 
