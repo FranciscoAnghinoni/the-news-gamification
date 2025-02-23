@@ -5,24 +5,19 @@ import { OpenRateChart } from "../components/OpenRateChart";
 import { Icon } from "../components/Icons";
 import { useState } from "react";
 import { useAdminStats } from "../hooks/useAdminStats";
-import { AdminStatsFilters, ApiError } from "../services/api";
+import { AdminStatsFilters, ApiError } from "../types/api";
 import { useNavigate } from "react-router-dom";
 import { format, subDays } from "date-fns";
 import { FilterModal } from "../components/FilterModal";
 import { Switch } from "@headlessui/react";
-
-interface LocalFilters {
-  startDate: string;
-  endDate: string;
-  newsletterDate: string;
-  minStreak: string;
-}
+import { LocalFilters } from "../types/components/filters";
 
 const getDefaultFilters = (): LocalFilters => ({
   startDate: format(subDays(new Date(), 7), "yyyy-MM-dd"),
   endDate: format(new Date(), "yyyy-MM-dd"),
   newsletterDate: "",
-  minStreak: "0",
+  minStreak: 0,
+  useMockData: false,
 });
 
 export function Admin() {
@@ -35,23 +30,26 @@ export function Admin() {
     {
       startDate: filters.startDate,
       endDate: filters.endDate,
-      newsletterDate: filters.newsletterDate || undefined,
-      minStreak: parseInt(filters.minStreak),
+      newsletterDate: filters.newsletterDate,
+      minStreak: filters.minStreak,
     },
     useMockData
   );
 
   const handleResetFilters = () => {
     setFilters(getDefaultFilters());
+    setIsFilterModalOpen(false);
   };
 
   const handleApplyFilters = (apiFilters: AdminStatsFilters) => {
     setFilters({
+      ...filters,
       startDate: apiFilters.startDate,
       endDate: apiFilters.endDate,
-      newsletterDate: apiFilters.newsletterDate || "",
-      minStreak: (apiFilters.minStreak ?? 0).toString(),
+      newsletterDate: apiFilters.newsletterDate,
+      minStreak: apiFilters.minStreak,
     });
+    setIsFilterModalOpen(false);
   };
 
   const handleToggleMockData = (enabled: boolean) => {
@@ -177,13 +175,24 @@ export function Admin() {
                 <h2 className="text-lg font-semibold text-marrom mb-6">
                   Evolução de Streaks
                 </h2>
-                <StreakEvolutionChart data={historicalData} />
+                <StreakEvolutionChart
+                  data={historicalData || []}
+                  title="Evolução de Streaks"
+                  dataKey="avg_streak"
+                  yAxisLabel="Média de Streak"
+                />
               </div>
               <div className="bg-branco p-6 rounded-lg border border-cinza/20 shadow-sm">
                 <h2 className="text-lg font-semibold text-marrom mb-6">
                   Taxa de Abertura por Dia
                 </h2>
-                <OpenRateChart data={historicalData} />
+                <OpenRateChart
+                  data={historicalData || []}
+                  title="Taxa de Abertura por Dia"
+                  dataKey="opening_rate"
+                  yAxisLabel="Taxa de Abertura (%)"
+                  yAxisDomain={[0, 100]}
+                />
               </div>
             </div>
           </>
@@ -194,12 +203,9 @@ export function Admin() {
         isOpen={isFilterModalOpen}
         onClose={() => setIsFilterModalOpen(false)}
         filters={filters}
-        onApplyFilters={(newFilters) => {
-          handleApplyFilters(newFilters);
-          setIsFilterModalOpen(false);
-        }}
+        onApplyFilters={handleApplyFilters}
         onReset={handleResetFilters}
-        isLoading={isLoading}
+        loading={isLoading}
       />
     </div>
   );

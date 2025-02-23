@@ -11,19 +11,18 @@ import {
   TopReader,
   HistoricalStats,
   AdminStatsFilters,
-} from "../services/api";
+  DailyStats,
+} from "../types/api/index";
 
 const generateMockData = () => {
-  const endDate = addHours(new Date(), 3); // Converte horário local para UTC
+  const endDate = addHours(new Date(), 3);
   const startDate = subDays(endDate, 90);
-  const dailyStats = [];
+  const dailyStats: DailyStats[] = [];
   let currentDate = startDate;
 
-  // Gerar dados diários para 90 dias
   while (currentDate <= endDate) {
     const formattedDate = format(currentDate, "yyyy-MM-dd");
 
-    // Gerar valores com alguma variação mas mantendo uma tendência
     const baseStreak = 5;
     const baseOpenRate = 75;
     const randomVariation = () => (Math.random() - 0.5) * 10;

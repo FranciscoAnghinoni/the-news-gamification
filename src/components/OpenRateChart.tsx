@@ -7,13 +7,9 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { DailyStats } from "../types/api";
+import { ChartProps } from "../types/components/charts";
 
-type Props = {
-  data?: DailyStats[];
-};
-
-export function OpenRateChart({ data }: Props) {
+export function OpenRateChart({ data }: ChartProps) {
   if (!data) return null;
 
   const formatDate = (dateString: string) => {

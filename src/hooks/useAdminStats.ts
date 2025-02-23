@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { api, AdminStatsFilters } from "../services/api";
+import { api } from "../services/api";
+import { AdminStatsFilters } from "../types/api";
 import { getMockData } from "../mocks/adminData";
 
 export function useAdminStats(

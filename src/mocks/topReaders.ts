@@ -1,52 +1,61 @@
-export const mockTopReaders = [
+import { TopReader } from "../types/api";
+import { format, subDays } from "date-fns";
+
+const today = new Date();
+
+export const mockTopReaders: TopReader[] = [
   {
-    name: "Maria Silva",
-    openRate: 98.5,
+    email: "maria.silva@example.com",
+    opening_rate: 98.5,
     streak: 14,
+    last_read: format(today, "yyyy-MM-dd"),
   },
   {
-    name: "João Santos",
-    openRate: 95.2,
+    email: "joao.santos@example.com",
+    opening_rate: 95.2,
     streak: 12,
+    last_read: format(today, "yyyy-MM-dd"),
   },
   {
-    name: "Você",
-    openRate: 92.8,
-    streak: 10,
-  },
-  {
-    name: "Ana Oliveira",
-    openRate: 89.4,
+    email: "ana.oliveira@example.com",
+    opening_rate: 89.4,
     streak: 8,
+    last_read: format(subDays(today, 1), "yyyy-MM-dd"),
   },
   {
-    name: "Pedro Costa",
-    openRate: 85.7,
+    email: "pedro.costa@example.com",
+    opening_rate: 85.7,
     streak: 7,
+    last_read: format(subDays(today, 1), "yyyy-MM-dd"),
   },
   {
-    name: "Carla Souza",
-    openRate: 78.3,
+    email: "carla.souza@example.com",
+    opening_rate: 78.3,
     streak: 5,
+    last_read: format(subDays(today, 2), "yyyy-MM-dd"),
   },
   {
-    name: "Roberto Lima",
-    openRate: 65.9,
+    email: "roberto.lima@example.com",
+    opening_rate: 65.9,
     streak: 4,
+    last_read: format(subDays(today, 2), "yyyy-MM-dd"),
   },
   {
-    name: "Lucia Ferreira",
-    openRate: 52.4,
+    email: "lucia.ferreira@example.com",
+    opening_rate: 52.4,
     streak: 3,
+    last_read: format(subDays(today, 3), "yyyy-MM-dd"),
   },
   {
-    name: "Bruno Santos",
-    openRate: 45.8,
+    email: "bruno.santos@example.com",
+    opening_rate: 45.8,
     streak: 2,
+    last_read: format(subDays(today, 3), "yyyy-MM-dd"),
   },
   {
-    name: "Patricia Mendes",
-    openRate: 32.1,
+    email: "patricia.mendes@example.com",
+    opening_rate: 32.1,
     streak: 1,
+    last_read: format(subDays(today, 4), "yyyy-MM-dd"),
   },
 ];

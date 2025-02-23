@@ -1,6 +1,4 @@
-type MotivationalMessageProps = {
-  streak: number | undefined;
-};
+import { MotivationalMessageProps } from "../types/components/stats";
 
 export function MotivationalMessage({ streak }: MotivationalMessageProps) {
   const getMessage = () => {

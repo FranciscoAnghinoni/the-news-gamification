@@ -1,38 +1,12 @@
 import axios, { AxiosError } from "axios";
-
-export interface UserStats {
-  current_streak: number;
-  highest_streak: number;
-  total_reads: number;
-  last_read_date: string;
-  opening_rate: number;
-  sources: string[] | null;
-  history: Array<{
-    date: string;
-    post_id: string;
-  }>;
-}
-
-export interface AdminStats {
-  total_users: number;
-  avg_streak: number;
-  avg_opening_rate: number;
-  active_users: number;
-}
-
-export interface AdminStatsFilters {
-  startDate: string;
-  endDate: string;
-  newsletterDate?: string;
-  minStreak?: number;
-}
-
-export interface TopReader {
-  email: string;
-  streak: number;
-  opening_rate: number;
-  last_read: string;
-}
+import {
+  UserStats,
+  AdminStats,
+  AdminStatsFilters,
+  TopReader,
+  HistoricalStats,
+  ApiError,
+} from "../types/api";
 
 export interface DailyStats {
   date: string;
@@ -40,22 +14,6 @@ export interface DailyStats {
   opening_rate: number;
 }
 
-export interface HistoricalStats {
-  daily_stats: DailyStats[];
-}
-
-export class ApiError extends Error {
-  constructor(
-    message: string,
-    public status: number,
-    public isAuthError: boolean = false
-  ) {
-    super(message);
-    this.name = "ApiError";
-  }
-}
-
-// API client setup
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   headers: {
@@ -98,7 +56,6 @@ const handleApiError = (error: AxiosError) => {
   throw new ApiError("Erro ao conectar com o servidor.", 500);
 };
 
-// API service
 export const api = {
   async createUser(username: string): Promise<{ userId: number }> {
     try {
@@ -128,7 +85,6 @@ export const api = {
       const response = await apiClient.get(`/api/stats/admin`, {
         params: filters,
       });
-      console.log(response);
       if (!response.data) {
         throw new ApiError("Dados não encontrados", 404);
       }

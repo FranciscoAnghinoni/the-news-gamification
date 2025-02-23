@@ -1,11 +1,4 @@
-import { ReactNode } from "react";
-
-interface StatsCardProps {
-  title: string;
-  icon: ReactNode;
-  gradient?: boolean;
-  children: ReactNode;
-}
+import { StatsCardProps } from "../types/components/stats";
 
 export function StatsCard({
   title,

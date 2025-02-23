@@ -1,6 +1,4 @@
-type StreakCardProps = {
-  currentStreak: number | undefined;
-};
+import { StreakCardProps } from "../types/components/stats";
 
 export function StreakCard({ currentStreak }: StreakCardProps) {
   return (

@@ -6,25 +6,27 @@ import { useNewsletterData } from "../hooks/useNewsletterData";
 import { mockTopReaders } from "../mocks/topReaders";
 import { StatsCard } from "../components/StatsCard";
 import { Icon } from "../components/Icons";
+import { TopReader } from "../types/api";
 
 export function Dashboard() {
   const [period] = useState(7);
   const { data: stats, isLoading, error } = useNewsletterData(period);
 
-  const getTopReaders = () => {
+  const getTopReaders = (): TopReader[] => {
     if (!stats) return mockTopReaders;
 
     const currentUserRate = stats.opening_rate;
     const allReaders = [
-      ...mockTopReaders.filter((reader) => reader.name !== "Você"),
+      ...mockTopReaders.filter((reader) => reader.email !== "você@example.com"),
       {
-        name: "Você",
-        openRate: currentUserRate,
+        email: "você@example.com",
+        opening_rate: currentUserRate,
         streak: stats.current_streak,
+        last_read: stats.last_read_date,
       },
     ];
 
-    return allReaders.sort((a, b) => b.openRate - a.openRate);
+    return allReaders.sort((a, b) => b.opening_rate - a.opening_rate);
   };
 
   if (isLoading) {

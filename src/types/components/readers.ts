@@ -1,26 +1,17 @@
-export interface Reader {
-  name: string;
-  openRate: number;
-  streak: number;
-}
+import { TopReader } from "../api";
 
 export interface TopReadersProps {
-  readers?: Reader[];
+  readers: TopReader[];
 }
 
 export interface TopReadersTableProps {
-  readers: Array<{
-    email: string;
-    streak: number;
-    opening_rate: number;
-    last_read: string;
-  }>;
+  readers: TopReader[];
 }
 
 export interface ReadingHistoryProps {
   history?: Array<{
     date: string;
-    post_id: string;
+    read: boolean;
   }>;
   days?: number;
 }

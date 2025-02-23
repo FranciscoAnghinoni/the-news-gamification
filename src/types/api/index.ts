@@ -4,11 +4,11 @@ export interface UserStats {
   total_reads: number;
   last_read_date: string;
   opening_rate: number;
-  sources: string[] | null;
-  history: Array<{
+  sources: string[];
+  history: {
     date: string;
-    post_id: string;
-  }>;
+    read: boolean;
+  }[];
 }
 
 export interface AdminStats {
@@ -16,6 +16,13 @@ export interface AdminStats {
   avg_streak: number;
   avg_opening_rate: number;
   active_users: number;
+}
+
+export interface AdminStatsFilters {
+  startDate: string;
+  endDate: string;
+  newsletterDate: string;
+  minStreak: number;
 }
 
 export interface TopReader {
@@ -33,4 +40,15 @@ export interface DailyStats {
 
 export interface HistoricalStats {
   daily_stats: DailyStats[];
+}
+
+export class ApiError extends Error {
+  status: number;
+  isAuthError: boolean;
+
+  constructor(message: string, status: number, isAuthError = false) {
+    super(message);
+    this.status = status;
+    this.isAuthError = isAuthError;
+  }
 }
