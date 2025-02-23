@@ -18,11 +18,14 @@ type Props = {
 export function StreakEvolutionChart({ data }: Props) {
   if (!data) return null;
 
+  const formatDate = (dateString: string) => {
+    const [, month, day] = dateString.split("-");
+    return `${day}/${month}`;
+  };
+
   const chartData = data.dates.map((date, index) => ({
-    date: new Date(date).toLocaleDateString("pt-BR", {
-      day: "2-digit",
-      month: "2-digit",
-    }),
+    date: date,
+    formattedDate: formatDate(date),
     avgStreak: data.streaks[index],
   }));
 
@@ -30,7 +33,12 @@ export function StreakEvolutionChart({ data }: Props) {
     <ResponsiveContainer width="100%" height={300}>
       <LineChart data={chartData}>
         <CartesianGrid strokeDasharray="3 3" stroke="#E5E5E5" />
-        <XAxis dataKey="date" stroke="#615A5A" fontSize={12} tickLine={false} />
+        <XAxis
+          dataKey="formattedDate"
+          stroke="#615A5A"
+          fontSize={12}
+          tickLine={false}
+        />
         <YAxis
           stroke="#615A5A"
           fontSize={12}
@@ -46,6 +54,12 @@ export function StreakEvolutionChart({ data }: Props) {
           labelStyle={{ color: "#240E0B" }}
           itemStyle={{ color: "#615A5A" }}
           formatter={(value: number) => [value.toFixed(1), "Média de Streak"]}
+          labelFormatter={(value) => {
+            const index = chartData.findIndex(
+              (item) => item.formattedDate === value
+            );
+            return index !== -1 ? formatDate(chartData[index].date) : value;
+          }}
         />
         <Line
           type="monotone"

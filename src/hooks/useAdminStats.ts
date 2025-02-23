@@ -3,23 +3,39 @@ import { api } from "../services/api";
 
 export function useAdminStats(period: number) {
   const getDateRange = (days: number) => {
-    const endDate = new Date();
+    // Get the date in Brazilian timezone
+    const now = new Date();
+    const brazilianDate = new Date(
+      now.toLocaleString("en-US", { timeZone: "America/Sao_Paulo" })
+    );
+
+    // Set to start of day
+    const endDate = new Date(brazilianDate);
     endDate.setHours(0, 0, 0, 0);
 
     const startDate = new Date(endDate);
     startDate.setDate(endDate.getDate() - (days - 1));
 
+    // Format dates in YYYY-MM-DD
+    const formatDate = (date: Date) => {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    };
+
     const range = {
-      startDate: startDate.toISOString().split("T")[0],
-      endDate: endDate.toISOString().split("T")[0],
+      startDate: formatDate(startDate),
+      endDate: formatDate(endDate),
     };
 
     const dates = [];
     const current = new Date(startDate);
     while (current <= endDate) {
-      dates.push(current.toISOString().split("T")[0]);
+      dates.push(formatDate(current));
       current.setDate(current.getDate() + 1);
     }
+
 
     return range;
   };
@@ -41,10 +57,16 @@ export function useAdminStats(period: number) {
     queryFn: async () => {
       const data = await api.getHistoricalStats(startDate, endDate);
 
+      // Sort the data chronologically once
+      const sortedStats = [...data.daily_stats].sort(
+        (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+      );
+
+      // Use dates directly from API response
       const transformedData = {
-        dates: data.daily_stats.map((stat) => stat.date),
-        streaks: data.daily_stats.map((stat) => stat.avg_streak),
-        openRates: data.daily_stats.map((stat) => stat.opening_rate),
+        dates: sortedStats.map((stat) => stat.date),
+        streaks: sortedStats.map((stat) => stat.avg_streak),
+        openRates: sortedStats.map((stat) => stat.opening_rate),
       };
 
       return transformedData;
