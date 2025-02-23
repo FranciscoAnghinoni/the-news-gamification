@@ -17,9 +17,9 @@ import {
   FunnelIcon,
   ArrowPathIcon,
 } from "@heroicons/react/24/outline";
-import { IconProps } from "../types/components/icons";
+import type { IconProps } from "../types/components/icons";
 
-export const Icons = {
+const Icons = {
   Users: UsersIcon,
   Fire: FireIcon,
   EnvelopeOpen: EnvelopeOpenIcon,
@@ -37,8 +37,9 @@ export const Icons = {
   ArrowDown: ArrowDownIcon,
   Filter: FunnelIcon,
   ArrowCounterClockwise: ArrowPathIcon,
-} as const;
+};
 
+export { Icons };
 export function Icon({ name, className = "w-6 h-6" }: IconProps) {
   const IconComponent = Icons[name];
   return <IconComponent className={className} />;
