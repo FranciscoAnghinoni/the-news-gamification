@@ -1,4 +1,11 @@
-import { subDays, format, addDays, parseISO, isWithinInterval } from "date-fns";
+import {
+  subDays,
+  format,
+  addDays,
+  parseISO,
+  isWithinInterval,
+  addHours,
+} from "date-fns";
 import {
   AdminStats,
   TopReader,
@@ -7,7 +14,7 @@ import {
 } from "../services/api";
 
 const generateMockData = () => {
-  const endDate = new Date();
+  const endDate = addHours(new Date(), 3); // Converte horário local para UTC
   const startDate = subDays(endDate, 90);
   const dailyStats = [];
   let currentDate = startDate;

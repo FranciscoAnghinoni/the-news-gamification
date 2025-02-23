@@ -1,6 +1,9 @@
 import { Icon } from "./Icons";
 import { useState } from "react";
 import { TopReadersTableProps } from "../types/components/readers";
+import { format, parseISO, addHours } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import { TopReader } from "../types/api";
 
 export function TopReadersTable({ readers }: TopReadersTableProps) {
   const [search, setSearch] = useState("");
@@ -8,6 +11,12 @@ export function TopReadersTable({ readers }: TopReadersTableProps) {
   const filteredReaders = readers.filter((reader) =>
     reader.email.toLowerCase().includes(search.toLowerCase())
   );
+
+  const formatLastRead = (dateString: string) => {
+    const date = parseISO(dateString);
+    const brDate = addHours(date, 3);
+    return format(brDate, "dd/MM/yyyy", { locale: ptBR });
+  };
 
   return (
     <div className="bg-branco rounded-lg border border-cinza/20 shadow-sm overflow-hidden">
@@ -82,7 +91,7 @@ export function TopReadersTable({ readers }: TopReadersTableProps) {
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-cinza">
-                  {new Date(reader.last_read).toLocaleDateString("pt-BR")}
+                  {formatLastRead(reader.last_read)}
                 </td>
               </tr>
             ))}
