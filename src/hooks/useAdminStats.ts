@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { api, AdminStatsFilters } from "../services/api";
-import { mockData } from "../mocks/adminData";
+import { getMockData } from "../mocks/adminData";
 
 export function useAdminStats(
   filters: AdminStatsFilters,
@@ -14,7 +14,7 @@ export function useAdminStats(
     queryKey: ["admin-stats", filters],
     queryFn: () =>
       useMockData
-        ? Promise.resolve(mockData.adminStats)
+        ? Promise.resolve(getMockData(filters).adminStats)
         : api.getAdminStats(filters),
     enabled: !useMockData,
   });
@@ -23,7 +23,7 @@ export function useAdminStats(
     queryKey: ["top-readers", filters],
     queryFn: () =>
       useMockData
-        ? Promise.resolve(mockData.topReaders)
+        ? Promise.resolve(getMockData(filters).topReaders)
         : api.getTopReaders(filters),
     enabled: !useMockData,
   });
@@ -32,12 +32,13 @@ export function useAdminStats(
     queryKey: ["historical-stats", filters],
     queryFn: () =>
       useMockData
-        ? Promise.resolve(mockData.historicalStats)
+        ? Promise.resolve(getMockData(filters).historicalStats)
         : api.getHistoricalStats(filters),
     enabled: !useMockData,
   });
 
   if (useMockData) {
+    const mockData = getMockData(filters);
     return {
       data: mockData.adminStats,
       topReaders: mockData.topReaders,

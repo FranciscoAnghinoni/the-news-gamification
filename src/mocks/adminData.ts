@@ -1,5 +1,10 @@
-import { subDays, format, addDays } from "date-fns";
-import { AdminStats, TopReader, HistoricalStats } from "../services/api";
+import { subDays, format, addDays, parseISO, isWithinInterval } from "date-fns";
+import {
+  AdminStats,
+  TopReader,
+  HistoricalStats,
+  AdminStatsFilters,
+} from "../services/api";
 
 const generateMockData = () => {
   const endDate = new Date();
@@ -109,4 +114,59 @@ const generateMockData = () => {
   };
 };
 
-export const mockData = generateMockData();
+const rawMockData = generateMockData();
+
+export function getMockData(filters: AdminStatsFilters) {
+  const { startDate, endDate, newsletterDate, minStreak } = filters;
+  const dateInterval = {
+    start: parseISO(startDate),
+    end: parseISO(endDate),
+  };
+
+  // Filtrar dados históricos
+  const filteredDailyStats = rawMockData.historicalStats.daily_stats.filter(
+    (stat) => {
+      const statDate = parseISO(stat.date);
+      return isWithinInterval(statDate, dateInterval);
+    }
+  );
+
+  // Se houver uma data específica de newsletter, filtrar apenas aquele dia
+  const finalDailyStats = newsletterDate
+    ? filteredDailyStats.filter((stat) => stat.date === newsletterDate)
+    : filteredDailyStats;
+
+  // Filtrar top readers
+  const filteredTopReaders = rawMockData.topReaders
+    .filter((reader) => {
+      const readerDate = parseISO(reader.last_read);
+      return isWithinInterval(readerDate, dateInterval);
+    })
+    .filter((reader) => reader.streak >= (minStreak || 0));
+
+  // Calcular médias para o período filtrado
+  const avgStreak =
+    finalDailyStats.reduce((sum, stat) => sum + stat.avg_streak, 0) /
+    finalDailyStats.length;
+
+  const avgOpeningRate =
+    finalDailyStats.reduce((sum, stat) => sum + stat.opening_rate, 0) /
+    finalDailyStats.length;
+
+  const filteredAdminStats: AdminStats = {
+    ...rawMockData.adminStats,
+    avg_streak: avgStreak,
+    avg_opening_rate: avgOpeningRate,
+    active_users: Math.floor(
+      rawMockData.adminStats.active_users * (finalDailyStats.length / 90)
+    ),
+  };
+
+  return {
+    adminStats: filteredAdminStats,
+    topReaders: filteredTopReaders,
+    historicalStats: {
+      daily_stats: finalDailyStats,
+    },
+  };
+}

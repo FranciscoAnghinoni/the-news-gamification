@@ -54,6 +54,11 @@ export function Admin() {
     });
   };
 
+  const handleToggleMockData = (enabled: boolean) => {
+    setUseMockData(enabled);
+    handleResetFilters();
+  };
+
   if (error) {
     const apiError = error as ApiError;
 
@@ -105,7 +110,7 @@ export function Admin() {
               </span>
               <Switch
                 checked={useMockData}
-                onChange={setUseMockData}
+                onChange={handleToggleMockData}
                 className={`${
                   useMockData ? "bg-amarelo" : "bg-cinza/20"
                 } relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-amarelo focus:ring-offset-2`}
