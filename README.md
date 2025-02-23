@@ -24,7 +24,8 @@ Uma aplicação web para gamificar a leitura de newsletters, incentivando o enga
 
   - Gráfico de evolução de streaks
   - Gráfico de taxa de abertura por dia
-  - Lista dos top leitores
+  - Lista dos top leitores com suporte a busca
+  - Tratamento de fuso horário (GMT-3 - Brasília)
 
 - **Sistema de Filtros**
 
@@ -91,8 +92,7 @@ src/
   │   ├── MetricCard/   # Cards de métricas
   │   └── Charts/       # Componentes de gráficos
   ├── contexts/         # Contextos React
-  │   ├── auth.ts      # Definição do contexto de autenticação
-  │   └── AuthProvider.tsx # Provedor de autenticação
+  │   └── AuthContext.tsx # Contexto de autenticação
   ├── hooks/            # Custom hooks
   │   └── useAdminStats/# Hook para gerenciar dados admin
   ├── pages/            # Páginas da aplicação
@@ -138,6 +138,15 @@ Para desenvolvimento, a aplicação inclui um modo mock que pode ser ativado atr
 - Simula variações naturais nas métricas
 - Não requer conexão com a API
 - Perfeito para desenvolvimento e testes
+
+### Tratamento de Fuso Horário
+
+A aplicação lida com datas considerando:
+
+- API retorna datas em UTC
+- Frontend converte para GMT-3 (Brasília)
+- Exibição formatada no padrão brasileiro (dd/MM/yyyy)
+- Conversão automática para visualização de métricas e estatísticas
 
 ## Feedback Visual
 
