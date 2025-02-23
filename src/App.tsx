@@ -4,14 +4,24 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
+import { Suspense, lazy } from "react";
 import { AuthProvider } from "./contexts/AuthContext";
-import { AuthPage } from "./pages/Auth";
 import { useAuth } from "./hooks/useAuth";
-import { Dashboard } from "./pages/Dashboard";
-import { Admin } from "./pages/Admin";
-import { Unauthorized } from "./pages/Unauthorized";
 import { AuthenticatedLayout } from "./components/AuthenticatedLayout";
 import { AdminRoute } from "./components/AdminRoute";
+
+// Lazy load pages
+const AuthPage = lazy(() => import("./pages/Auth"));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const Admin = lazy(() => import("./pages/Admin"));
+const Unauthorized = lazy(() => import("./pages/Unauthorized"));
+
+// Loading component
+const PageLoader = () => (
+  <div className="min-h-screen bg-branco flex items-center justify-center">
+    <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-amarelo" />
+  </div>
+);
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, isAuthenticated } = useAuth();
@@ -28,27 +38,29 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-        <Routes>
-          <Route path="/auth" element={<AuthPage />} />
-          <Route path="/unauthorized" element={<Unauthorized />} />
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin"
-            element={
-              <AdminRoute>
-                <Admin />
-              </AdminRoute>
-            }
-          />
-          <Route path="/" element={<Navigate to="/dashboard" />} />
-        </Routes>
+        <Suspense fallback={<PageLoader />}>
+          <Routes>
+            <Route path="/auth" element={<AuthPage />} />
+            <Route path="/unauthorized" element={<Unauthorized />} />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin"
+              element={
+                <AdminRoute>
+                  <Admin />
+                </AdminRoute>
+              }
+            />
+            <Route path="/" element={<Navigate to="/dashboard" />} />
+          </Routes>
+        </Suspense>
       </Router>
     </AuthProvider>
   );

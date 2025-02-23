@@ -20,7 +20,7 @@ const getDefaultFilters = (): LocalFilters => ({
   useMockData: false,
 });
 
-export function Admin() {
+export default function Admin() {
   const navigate = useNavigate();
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const [filters, setFilters] = useState<LocalFilters>(getDefaultFilters());

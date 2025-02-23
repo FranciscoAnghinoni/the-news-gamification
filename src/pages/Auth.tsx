@@ -9,7 +9,7 @@ interface FormInputs {
   confirmPassword?: string;
 }
 
-export function AuthPage() {
+export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);

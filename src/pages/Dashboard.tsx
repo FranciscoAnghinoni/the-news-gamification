@@ -8,7 +8,7 @@ import { StatsCard } from "../components/StatsCard";
 import { Icon } from "../components/Icons";
 import { TopReader } from "../types/api";
 
-export function Dashboard() {
+export default function Dashboard() {
   const [period] = useState(7);
   const { data: stats, isLoading, error } = useNewsletterData(period);
 
