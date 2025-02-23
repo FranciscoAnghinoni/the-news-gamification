@@ -3,6 +3,7 @@ export interface IconProps {
   className?: string;
 }
 
+// @ts-expect-error: Suppress unused type error
 export type IconName =
   | "Users"
   | "Fire"
