@@ -1,4 +1,4 @@
-import { TopReader } from "../api";
+import type { TopReader } from "../api";
 
 export interface TopReadersProps {
   readers: TopReader[];

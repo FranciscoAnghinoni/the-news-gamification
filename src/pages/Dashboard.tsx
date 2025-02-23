@@ -17,9 +17,11 @@ export function Dashboard() {
 
     const currentUserRate = stats.opening_rate;
     const allReaders = [
-      ...mockTopReaders.filter((reader) => reader.email !== "você@example.com"),
+      ...mockTopReaders.filter(
+        (reader) => reader.email !== "current.user@example.com"
+      ),
       {
-        email: "você@example.com",
+        email: "current.user@example.com",
         opening_rate: currentUserRate,
         streak: stats.current_streak,
         last_read: stats.last_read_date,
