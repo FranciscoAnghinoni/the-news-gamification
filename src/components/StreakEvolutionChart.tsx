@@ -7,12 +7,10 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { DailyStats } from "../types/api";
 
 type Props = {
-  data?: {
-    dates: string[];
-    streaks: number[];
-  };
+  data?: DailyStats[];
 };
 
 export function StreakEvolutionChart({ data }: Props) {
@@ -23,10 +21,10 @@ export function StreakEvolutionChart({ data }: Props) {
     return `${day}/${month}`;
   };
 
-  const chartData = data.dates.map((date, index) => ({
-    date: date,
-    formattedDate: formatDate(date),
-    avgStreak: data.streaks[index],
+  const chartData = data.map((stat) => ({
+    date: stat.date,
+    formattedDate: formatDate(stat.date),
+    avgStreak: stat.avg_streak,
   }));
 
   return (

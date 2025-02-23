@@ -10,7 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.2.0",
+    "date-fns": "^4.1.0",
     "react": "^19.0.0",
     "react-canvas-confetti": "^2.0.7",
     "react-dom": "^19.0.0",

@@ -14,6 +14,8 @@ import {
   MagnifyingGlassIcon,
   ArrowUpIcon,
   ArrowDownIcon,
+  FunnelIcon,
+  ArrowPathIcon,
 } from "@heroicons/react/24/outline";
 import { IconName, IconProps } from "../types/components/icons";
 
@@ -33,6 +35,8 @@ export const Icons = {
   MagnifyingGlass: MagnifyingGlassIcon,
   ArrowUp: ArrowUpIcon,
   ArrowDown: ArrowDownIcon,
+  Filter: FunnelIcon,
+  ArrowCounterClockwise: ArrowPathIcon,
 } as const;
 
 export function Icon({ name, className = "w-6 h-6" }: IconProps) {

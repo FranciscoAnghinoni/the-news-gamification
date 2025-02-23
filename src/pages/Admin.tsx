@@ -5,23 +5,54 @@ import { OpenRateChart } from "../components/OpenRateChart";
 import { Icon } from "../components/Icons";
 import { useState } from "react";
 import { useAdminStats } from "../hooks/useAdminStats";
-import { ApiError } from "../services/api";
+import { AdminStatsFilters, ApiError } from "../services/api";
 import { useNavigate } from "react-router-dom";
+import { format, subDays } from "date-fns";
+import { FilterModal } from "../components/FilterModal";
+import { Switch } from "@headlessui/react";
+
+interface LocalFilters {
+  startDate: string;
+  endDate: string;
+  newsletterDate: string;
+  minStreak: string;
+}
+
+const getDefaultFilters = (): LocalFilters => ({
+  startDate: format(subDays(new Date(), 7), "yyyy-MM-dd"),
+  endDate: format(new Date(), "yyyy-MM-dd"),
+  newsletterDate: "",
+  minStreak: "0",
+});
 
 export function Admin() {
   const navigate = useNavigate();
-  const [period, setPeriod] = useState("7");
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+  const [filters, setFilters] = useState<LocalFilters>(getDefaultFilters());
+  const [useMockData, setUseMockData] = useState(false);
+
   const { data, topReaders, historicalData, isLoading, error } = useAdminStats(
-    Number(period)
+    {
+      startDate: filters.startDate,
+      endDate: filters.endDate,
+      newsletterDate: filters.newsletterDate || undefined,
+      minStreak: parseInt(filters.minStreak),
+    },
+    useMockData
   );
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-branco flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-amarelo" />
-      </div>
-    );
-  }
+  const handleResetFilters = () => {
+    setFilters(getDefaultFilters());
+  };
+
+  const handleApplyFilters = (apiFilters: AdminStatsFilters) => {
+    setFilters({
+      startDate: apiFilters.startDate,
+      endDate: apiFilters.endDate,
+      newsletterDate: apiFilters.newsletterDate || "",
+      minStreak: (apiFilters.minStreak ?? 0).toString(),
+    });
+  };
 
   if (error) {
     const apiError = error as ApiError;
@@ -52,10 +83,6 @@ export function Admin() {
     );
   }
 
-  const handlePeriodChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setPeriod(e.target.value);
-  };
-
   return (
     <div className="min-h-screen bg-branco">
       <div className="container mx-auto px-4 py-8">
@@ -64,67 +91,111 @@ export function Admin() {
             Painel Administrativo
           </h1>
 
-          <select
-            className="px-4 py-2 border border-cinza/20 rounded-lg bg-branco text-marrom focus:outline-none focus:ring-2 focus:ring-amarelo"
-            value={period}
-            onChange={handlePeriodChange}
-          >
-            <option value="7">Últimos 7 dias</option>
-            <option value="30">Últimos 30 dias</option>
-            <option value="90">Últimos 90 dias</option>
-          </select>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <MetricCard
-            title="Total de Leitores"
-            value={data?.total_users || 0}
-            trend={{ value: 12, isPositive: true }}
-            description="vs. mês anterior"
-            icon={<Icon name="Users" />}
-          />
-          <MetricCard
-            title="Média de Streak"
-            value={`${data?.avg_streak?.toFixed(1) || "0"} dias`}
-            trend={{ value: 25, isPositive: true }}
-            description="vs. último mês"
-            icon={<Icon name="Fire" />}
-          />
-          <MetricCard
-            title="Taxa de Abertura"
-            value={`${data?.avg_opening_rate?.toFixed(1) || "0"}%`}
-            trend={{ value: 5, isPositive: false }}
-            description="Meta: 70%"
-            icon={<Icon name="EnvelopeOpen" />}
-          />
-          <MetricCard
-            title="Leitores Ativos"
-            value={data?.active_users || 0}
-            trend={{ value: 8, isPositive: true }}
-            description={`Últimos ${period} dias`}
-            icon={<Icon name="UserGroup" />}
-          />
-        </div>
-
-        <div className="mb-8">
-          <TopReadersTable readers={topReaders || []} />
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-branco p-6 rounded-lg border border-cinza/20 shadow-sm">
-            <h2 className="text-lg font-semibold text-marrom mb-6">
-              Evolução de Streaks
-            </h2>
-            <StreakEvolutionChart data={historicalData} />
-          </div>
-          <div className="bg-branco p-6 rounded-lg border border-cinza/20 shadow-sm">
-            <h2 className="text-lg font-semibold text-marrom mb-6">
-              Taxa de Abertura por Dia
-            </h2>
-            <OpenRateChart data={historicalData} />
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => setIsFilterModalOpen(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+            >
+              <Icon name="Filter" className="w-5 h-5" />
+              <span>Filtros</span>
+            </button>
+            <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg">
+              <span className="text-sm font-medium text-marrom">
+                Dados Mock
+              </span>
+              <Switch
+                checked={useMockData}
+                onChange={setUseMockData}
+                className={`${
+                  useMockData ? "bg-amarelo" : "bg-cinza/20"
+                } relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-amarelo focus:ring-offset-2`}
+              >
+                <span
+                  className={`${
+                    useMockData ? "translate-x-5" : "translate-x-1"
+                  } inline-block h-3 w-3 transform rounded-full bg-branco transition-transform`}
+                />
+              </Switch>
+            </div>
           </div>
         </div>
+
+        {isLoading ? (
+          <div className="min-h-[500px] flex items-center justify-center">
+            <div className="flex flex-col items-center gap-4">
+              <Icon
+                name="ArrowCounterClockwise"
+                className="w-12 h-12 text-amarelo animate-spin"
+              />
+              <span className="text-marrom">Carregando dados...</span>
+            </div>
+          </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+              <MetricCard
+                title="Total de Leitores"
+                value={data?.total_users || 0}
+                trend={{ value: 12, isPositive: true }}
+                description="vs. mês anterior"
+                icon={<Icon name="Users" />}
+              />
+              <MetricCard
+                title="Média de Streak"
+                value={`${data?.avg_streak?.toFixed(1) || "0"} dias`}
+                trend={{ value: 25, isPositive: true }}
+                description="vs. último mês"
+                icon={<Icon name="Fire" />}
+              />
+              <MetricCard
+                title="Taxa de Abertura"
+                value={`${data?.avg_opening_rate?.toFixed(1) || "0"}%`}
+                trend={{ value: 5, isPositive: false }}
+                description="Meta: 70%"
+                icon={<Icon name="EnvelopeOpen" />}
+              />
+              <MetricCard
+                title="Leitores Ativos"
+                value={data?.active_users || 0}
+                trend={{ value: 8, isPositive: true }}
+                description="Últimos 7 dias"
+                icon={<Icon name="UserGroup" />}
+              />
+            </div>
+
+            <div className="mb-8">
+              <TopReadersTable readers={topReaders || []} />
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="bg-branco p-6 rounded-lg border border-cinza/20 shadow-sm">
+                <h2 className="text-lg font-semibold text-marrom mb-6">
+                  Evolução de Streaks
+                </h2>
+                <StreakEvolutionChart data={historicalData} />
+              </div>
+              <div className="bg-branco p-6 rounded-lg border border-cinza/20 shadow-sm">
+                <h2 className="text-lg font-semibold text-marrom mb-6">
+                  Taxa de Abertura por Dia
+                </h2>
+                <OpenRateChart data={historicalData} />
+              </div>
+            </div>
+          </>
+        )}
       </div>
+
+      <FilterModal
+        isOpen={isFilterModalOpen}
+        onClose={() => setIsFilterModalOpen(false)}
+        filters={filters}
+        onApplyFilters={(newFilters) => {
+          handleApplyFilters(newFilters);
+          setIsFilterModalOpen(false);
+        }}
+        onReset={handleResetFilters}
+        isLoading={isLoading}
+      />
     </div>
   );
 }

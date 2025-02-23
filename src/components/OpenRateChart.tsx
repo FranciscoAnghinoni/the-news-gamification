@@ -7,12 +7,10 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { DailyStats } from "../types/api";
 
 type Props = {
-  data?: {
-    dates: string[];
-    openRates: number[];
-  };
+  data?: DailyStats[];
 };
 
 export function OpenRateChart({ data }: Props) {
@@ -23,10 +21,10 @@ export function OpenRateChart({ data }: Props) {
     return `${day}/${month}`;
   };
 
-  const chartData = data.dates.map((date, index) => ({
-    date: date,
-    formattedDate: formatDate(date),
-    rate: Math.min(100, Math.max(0, data.openRates[index])),
+  const chartData = data.map((stat) => ({
+    date: stat.date,
+    formattedDate: formatDate(stat.date),
+    rate: Math.min(100, Math.max(0, stat.opening_rate)),
   }));
 
   return (

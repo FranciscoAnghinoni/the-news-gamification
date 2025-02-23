@@ -20,6 +20,13 @@ export interface AdminStats {
   active_users: number;
 }
 
+export interface AdminStatsFilters {
+  startDate: string;
+  endDate: string;
+  newsletterDate?: string;
+  minStreak?: number;
+}
+
 export interface TopReader {
   email: string;
   streak: number;
@@ -116,10 +123,10 @@ export const api = {
     }
   },
 
-  async getAdminStats(startDate: string, endDate: string): Promise<AdminStats> {
+  async getAdminStats(filters: AdminStatsFilters): Promise<AdminStats> {
     try {
       const response = await apiClient.get(`/api/stats/admin`, {
-        params: { startDate, endDate },
+        params: filters,
       });
       if (!response.data) {
         throw new ApiError("Dados não encontrados", 404);
@@ -131,14 +138,12 @@ export const api = {
     }
   },
 
-  async getTopReaders(
-    startDate: string,
-    endDate: string
-  ): Promise<TopReader[]> {
+  async getTopReaders(filters: AdminStatsFilters): Promise<TopReader[]> {
     try {
       const response = await apiClient.get(`/api/stats/admin/top-readers`, {
-        params: { startDate, endDate },
+        params: filters,
       });
+      console.log(response.data);
       if (!response.data) {
         throw new ApiError("Dados não encontrados", 404);
       }
@@ -150,12 +155,11 @@ export const api = {
   },
 
   async getHistoricalStats(
-    startDate: string,
-    endDate: string
+    filters: AdminStatsFilters
   ): Promise<HistoricalStats> {
     try {
       const response = await apiClient.get(`/api/stats/admin/historical`, {
-        params: { startDate, endDate },
+        params: filters,
       });
 
       if (!response.data) {

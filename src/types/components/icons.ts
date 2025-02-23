@@ -18,4 +18,6 @@ export type IconName =
   | "UserCircle"
   | "MagnifyingGlass"
   | "ArrowUp"
-  | "ArrowDown";
+  | "ArrowDown"
+  | "Filter"
+  | "ArrowCounterClockwise";
