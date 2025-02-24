@@ -89,12 +89,12 @@ export default function Admin() {
   return (
     <div className="min-h-screen bg-branco">
       <div className="container mx-auto px-4 py-8">
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
           <h1 className="text-3xl font-bold text-marrom">
             Painel Administrativo
           </h1>
 
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-4 w-full sm:w-auto">
             <button
               onClick={() => setIsFilterModalOpen(true)}
               className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
@@ -103,7 +103,7 @@ export default function Admin() {
               <span>Filtros</span>
             </button>
             <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg">
-              <span className="text-sm font-medium text-marrom">
+              <span className="text-sm font-medium text-marrom whitespace-nowrap">
                 Dados Mock
               </span>
               <Switch

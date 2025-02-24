@@ -28,7 +28,10 @@ export default function Dashboard() {
       },
     ];
 
-    return allReaders.sort((a, b) => b.opening_rate - a.opening_rate);
+    // Ordenar por taxa de abertura e retornar apenas os 10 primeiros
+    return allReaders
+      .sort((a, b) => b.opening_rate - a.opening_rate)
+      .slice(0, 10);
   };
 
   if (isLoading) {

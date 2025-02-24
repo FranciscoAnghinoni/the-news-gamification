@@ -36,31 +36,31 @@ export function TopReadersTable({ readers }: TopReadersTableProps) {
         </div>
       </div>
 
-      <div className="relative">
+      <div className="relative overflow-x-auto">
         <table className="min-w-full divide-y divide-cinza/20">
           <thead className="bg-cinza/5">
             <tr>
               <th
                 scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-cinza uppercase tracking-wider w-[35%]"
+                className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-cinza uppercase tracking-wider w-[35%]"
               >
                 Email
               </th>
               <th
                 scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-cinza uppercase tracking-wider w-[20%]"
+                className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-cinza uppercase tracking-wider w-[20%]"
               >
                 Streak
               </th>
               <th
                 scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-cinza uppercase tracking-wider w-[25%]"
+                className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-cinza uppercase tracking-wider w-[25%]"
               >
                 Taxa de Abertura
               </th>
               <th
                 scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-cinza uppercase tracking-wider w-[20%]"
+                className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-cinza uppercase tracking-wider w-[20%]"
               >
                 Última Leitura
               </th>
@@ -72,10 +72,10 @@ export function TopReadersTable({ readers }: TopReadersTableProps) {
             <tbody className="bg-branco divide-y divide-cinza/20">
               {filteredReaders.map((reader) => (
                 <tr key={reader.email} className="hover:bg-amarelo/5">
-                  <td className="px-6 py-4 whitespace-nowrap text-marrom w-[35%]">
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-marrom w-[35%] text-sm">
                     {reader.email}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap w-[20%]">
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap w-[20%]">
                     <div className="flex items-center">
                       <span className="text-sm font-medium text-marrom">
                         {reader.streak === 0 ? (
@@ -91,9 +91,9 @@ export function TopReadersTable({ readers }: TopReadersTableProps) {
                       )}
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap w-[25%]">
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap w-[25%]">
                     <div className="flex items-center">
-                      <div className="w-24 bg-cinza/20 rounded-full h-2">
+                      <div className="w-16 sm:w-24 bg-cinza/20 rounded-full h-2">
                         <div
                           className="bg-amarelo h-2 rounded-full"
                           style={{ width: `${reader.opening_rate}%` }}
@@ -104,7 +104,7 @@ export function TopReadersTable({ readers }: TopReadersTableProps) {
                       </span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-cinza w-[20%]">
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-cinza w-[20%]">
                     {formatLastRead(reader.last_read)}
                   </td>
                 </tr>
